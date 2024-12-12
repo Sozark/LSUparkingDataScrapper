@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Parking Manager</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="availability.html">Availability</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="admin.html">Admin</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1 class="text-center">Admin Panel</h1>
+        <form id="update-parking-form" class="mt-4">
+            <button type="button" class="btn btn-primary w-100" id="update-data-btn">Update Parking Data</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('update-data-btn').addEventListener('click', async () => {
+    console.log('Update button clicked'); // Log click event
+    try {
+        const response = await fetch('/api/update', {
+            method: 'POST',
+        });
+        console.log('Response received:', response);
+
+        if (!response.ok) {
+            throw new Error(`Failed to update data: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        alert(`${result.count} parking lots updated successfully.`);
+    } catch (error) {
+        console.error('Error updating data:', error);
+        alert('Error updating parking data.');
+    }
+});
+
+    </script>
+</body>
+</html>
