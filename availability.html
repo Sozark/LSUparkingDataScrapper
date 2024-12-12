@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parking Availability</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -41,36 +38,33 @@
     </div>
 
     <script>
-       async function loadAvailability() {
-    try {
-        const response = await fetch('http://localhost:3001/api/lots');// Use correct backend URL
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+        async function loadAvailability() {
+            try {
+                const response = await fetch('http://localhost:3001/api/lots');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                const tableBody = document.getElementById('availability-table');
+                tableBody.innerHTML = '';
+                
+                data.forEach((lot) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${lot.lotName}</td>
+                        <td>${lot.availability}%</td>
+                        <td>${new Date(lot.lastUpdated).toLocaleString()}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching parking lot data:', error);
+                alert('Failed to load parking lot data.');
+            }
         }
 
-        const data = await response.json(); // Parse JSON response
-
-        const tableBody = document.getElementById('availability-table');
-        tableBody.innerHTML = ''; // Clear existing rows
-
-        data.forEach((lot) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${lot.lotName}</td>
-                <td>${lot.availability}%</td>
-                <td>${new Date(lot.lastUpdated).toLocaleString()}</td>
-            `;
-            tableBody.appendChild(row);
-        });
-    } catch (error) {
-        console.error('Error fetching parking lot data:', error);
-        alert('Failed to load parking lot data.');
-    }
-}
-
-// Load data when the page loads
-document.addEventListener('DOMContentLoaded', loadAvailability);
-
+        document.addEventListener('DOMContentLoaded', loadAvailability);
     </script>
 </body>
 </html>
